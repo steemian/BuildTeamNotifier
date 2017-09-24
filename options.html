@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Options:</title>
+  <style>
+    body: { padding: 10px; }
+  </style>
+</head>
+
+<body>
+
+  
+    <fieldset>
+    <legend>Define your preferences</legend>
+        <div>
+            <input type="checkbox" id="votes" name="preferences" value="votes" checked>
+            <label for="votes"> notify on upvotes:</label>
+        </div>
+        <div>
+            <input type="checkbox" id="comments" name="preferences" value="comments" checked>
+            <label for="comments"> notify on comments:</label>
+        </div>
+        <div>
+            <input type="checkbox" id="mentions" name="preferences" value="mentions" checked>
+            <label for="mentions"> notify on mentions:</label>
+        </div>
+    </fieldset>
+  
+  <div id="status"></div>    
+  <button id="save">Save</button>
+
+  <script src="options.js"></script>
+</body>
+</html>
