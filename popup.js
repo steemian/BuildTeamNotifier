@@ -10,34 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function fillDict(array)
 {
-	var instance1 = new Object();
-	var key1 = 1;
-	instance1.authors = "Ray";
-	instance1.link = "link to it";
-	instance1.title = "Vote";
-	instance1.user = "Ray";
-	instance1.numOfAuthors = 20;
-	dict[key1] = instance1;
-
-	var instance2 = new Object();
-	var key2 = 2;
-	instance2.authors = "Ray";
-	instance2.link = "link to it";
-	instance2.title = "Comment";
-	instance2.user = "Ray";
-	instance2.numOfAuthors = 6;
-	dict[key2] = instance2;
-
-	var instance3 = new Object();
-	var key3 = 3;
-	instance3.authors = "Ray";
-	instance3.link = "link to it";
-	instance3.title = "Mention";
-	instance3.user = "Ray";
-	instance3.numOfAuthors = 5;
-	dict[key3] = instance3;
-
-
 	for(var i = 0; i < array.length; i++)
 	{
 		var instance = array[i];

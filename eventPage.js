@@ -1,5 +1,5 @@
 window.App = {}
-window.App.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
+window.App.cable = ActionCable.createConsumer("ws://minnowbooster.net/cable");
 var amount = 0;
 var oldChromeVersion = !chrome.runtime;
 var list = []
