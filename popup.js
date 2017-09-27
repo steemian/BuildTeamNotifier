@@ -71,7 +71,7 @@ function makeList(ourDict)
 				p.className = "link"
 
 				var authors = getAllAuthors(instance);
-				var link = instance.link.substr(0, 40) + "\u2026";
+				var link = instance.link.substr(0, 10) + "\u2026";
 
 				if(instance.title === "Vote") {
 					p.innerHTML = authors + " upvoted: " + link;
