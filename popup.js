@@ -37,7 +37,7 @@ function fillDict(array)
 			newInstance.authors = instance.author;
 			newInstance.link = instance.link;
 			newInstance.title = instance.title;
-			newInstance.user = instance.user;
+			newInstance.url = instance.url;
 			newInstance.numOfAuthors = 1;
 			dict[myKey] = newInstance;
 		}
@@ -65,7 +65,7 @@ function makeList(ourDict)
 				i.className = "material-icons icons";
 				i.innerHTML = "<i class='material-icons clear'>clear</i>";
 				var instance = dict[key];
-				var href = "https://steemit.com/@" + instance.user + "/" + instance.link;
+				var href = instance.url;
 				p.onclick= function() { chrome.tabs.create({url: href}) };
 				i.onclick = function() { delete dict[key]; emptyList(); makeList(dict)};
 				p.className = "link"
@@ -73,11 +73,11 @@ function makeList(ourDict)
 				var authors = getAllAuthors(instance);
 				var link = instance.link.substr(0, 10) + "\u2026";
 
-				if(instance.title === "Vote") {
+				if(instance.title === "upvote") {
 					p.innerHTML = authors + " upvoted: " + link;
 					div.className = "upvotes";
 				}
-				else if(instance.title === "Comment") {
+				else if(instance.title === "comment") {
 					p.innerHTML = authors + " commented: " + link;
 					div.className = "comments"
 				}

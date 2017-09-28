@@ -27,13 +27,13 @@ else {
   chrome.runtime.onInstalled.addListener(onInit);
 }
 
-function addToList(data)
+function addToList(data, title)
 {
 	var input = new Object();
-	input.title = data["title"];
+	input.title = title;
 	input.author = data["author"];
 	input.link = data["permlink"];
-	input.user = data["user"]
+	input.url = data["url"]
 	list.push(input);
 }
 
@@ -65,20 +65,42 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 function createNewSubscription(name)
 {
-	window.App.cable.subscriptions.create ({channel:"WebNotificationsChannel", name: name}, {received: function(data)
-		{
-			var title = data["title"];
-			if((!votes && title === "Vote") || (!comments && title === "Comment") || (!mentions && title === "Mention"))
+	if(votes)
+	{
+		window.App.cable.subscriptions.create ({channel:"UpvoteChannel", name: name}, {received: function(data)
 			{
-				return;
+				addToList(data, "upvote");
+				amount++;
+				chrome.browserAction.setBadgeText({text: amount + ""});
+				chrome.runtime.sendMessage({msg: "add", data: 0});
 			}
+		});
+	}
 
-			addToList(data)
-			amount++;
-			chrome.browserAction.setBadgeText({text: amount + ""});
-			chrome.runtime.sendMessage({msg: "add", data: 0});
-	    }
-	});
+	if(mentions)
+	{
+		window.App.cable.subscriptions.create ({channel:"MentionChannel", name: name}, {received: function(data)
+			{
+				addToList(data, "mention");
+				amount++;
+				chrome.browserAction.setBadgeText({text: amount + ""});
+				chrome.runtime.sendMessage({msg: "add", data: 0});
+			}
+		});
+	}
+
+	if(comments)
+	{
+		window.App.cable.subscriptions.create ({channel:"CommentChannel", name: name}, {received: function(data)
+			{
+				addToList(data, "comment");
+				amount++;
+				chrome.browserAction.setBadgeText({text: amount + ""});
+				chrome.runtime.sendMessage({msg: "add", data: 0});
+			}
+		});
+	}
+	
 }
 	
 function recieveData(data)
