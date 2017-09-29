@@ -10,17 +10,20 @@ var notificationsStored = 10;
 var votes = true;
 var comments = true;
 var mentions = true;
+var sound = true;
 
 chrome.storage.sync.get({
 	wantsVotes: true,
 	wantsComments: true,
 	wantsMentions: true,
-	notificationsStored: 10
+	notificationsStored: 10,
+	sound: true
 }, function(items) {
 	votes = items.wantsVotes;
 	comments = items.wantsComments;
 	mentions = items.wantsMentions;
 	notificationsStored = items.notificationsStored;
+	sound = items.sound;
 });
 
 var mentionChannel;
@@ -104,7 +107,11 @@ function createNewSubscription(name)
 				amount++;
 				chrome.browserAction.setBadgeText({text: amount + ""});
 				chrome.runtime.sendMessage({msg: "add", data: 0});
-				myAudio.play();
+
+				if(sound)
+				{
+					myAudio.play();
+				}
 			}
 		});
 	}
@@ -121,7 +128,10 @@ function createNewSubscription(name)
 				amount++;
 				chrome.browserAction.setBadgeText({text: amount + ""});
 				chrome.runtime.sendMessage({msg: "add", data: 0});
-				myAudio.play();
+				if(sound)
+				{
+					myAudio.play();
+				}			
 			}
 		});
 	}
@@ -138,7 +148,10 @@ function createNewSubscription(name)
 				amount++;
 				chrome.browserAction.setBadgeText({text: amount + ""});
 				chrome.runtime.sendMessage({msg: "add", data: 0});
-				myAudio.play();
+				if(sound)
+				{
+					myAudio.play();
+				}
 			}
 		});
 	}
@@ -179,6 +192,10 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 				else if(key === 'notificationsStored')
 				{
 					notificationsStored = storageChange.newValue;
+				}
+				else if(vote === 'sound')
+				{
+					sound = storageChange.newValue;
 				}
 			}
 });

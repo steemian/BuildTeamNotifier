@@ -4,12 +4,14 @@ function save_options() {
     var wantsComments = document.getElementById('comments').checked;
     var wantsMentions = document.getElementById('mentions').checked;
     var notificationsStored = document.getElementById('amount').value;
+    var sound = document.getElementById('mute').checked;
 
     chrome.storage.sync.set({
         wantsVotes: wantsVotes,
         wantsComments: wantsComments,
         wantsMentions: wantsMentions,
-        notificationsStored: notificationsStored
+        notificationsStored: notificationsStored,
+        sound: sound
     }, function() {
 
       // Update status to let user know options were saved.
@@ -28,12 +30,15 @@ function save_options() {
         wantsVotes: true,
         wantsComments: true,
         wantsMentions: true,
-        notificationsStored: 10
+        notificationsStored: 10,
+        sound: true
     }, function(items) {
       document.getElementById('votes').checked = items.wantsVotes;
       document.getElementById('comments').checked = items.wantsComments;
       document.getElementById('mentions').checked = items.wantsMentions;
       document.getElementById('amount').value = items.notificationsStored;
+      document.getElementById('mute').checked = items.sound;
+      
     });
   }
   document.addEventListener('DOMContentLoaded', restore_options);
