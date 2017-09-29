@@ -3,7 +3,7 @@
 
   "name": "BuildTeam - Notifier",
   "description": "This extension allows the user to be notified about certain Steemit events.",
-  "version": "1.3",
+  "version": "1.5",
   "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'",
 	
   "browser_action": {

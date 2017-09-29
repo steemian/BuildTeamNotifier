@@ -193,7 +193,7 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 				{
 					notificationsStored = storageChange.newValue;
 				}
-				else if(vote === 'sound')
+				else if(key === 'sound')
 				{
 					sound = storageChange.newValue;
 				}
