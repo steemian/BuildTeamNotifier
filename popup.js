@@ -22,9 +22,11 @@ function fillDict(array)
         		if(myKey in dict)
 				{
 					hadKey = true;
-					if(dict[key].numOfAuthors < 2)
+					
+					if(dict[key].title === "mention")
 					{
-						dict[key].author = dict[key].author + ", " + instance.author
+						dict[key].url = "https://www.minnowbooster.net/users/" + retrieveUsername() + "/mentions";
+						dict[key].link = (dict[key].numOfAuthors + 1) + " locations"
 					}
 					dict[key].numOfAuthors++;
 					break;
@@ -47,7 +49,19 @@ function fillDict(array)
 
 function getUniqueKey(instance)
 {
+	if(instance.title === "mention")
+	{
+		return instance.title + instance.authors;
+	}
 	return instance.title + instance.link;
+}
+
+function clear(key)
+{
+	chrome.runtime.sendMessage({delete: dict[key]}, function(response) {});
+	delete dict[key]; 	
+	emptyList();
+ 	makeList(dict);
 }
 
 function makeList(ourDict)
@@ -67,7 +81,7 @@ function makeList(ourDict)
 				var instance = dict[key];
 				var href = instance.url;
 				p.onclick= function() { chrome.tabs.create({url: href}) };
-				i.onclick = function() { delete dict[key]; emptyList(); makeList(dict)};
+				i.onclick = function() { clear(key)};
 				p.className = "link"
 
 				var authors = getAllAuthors(instance);
@@ -142,6 +156,16 @@ function getSavedUsername() {
   });
 }
 
+function retrieveUsername()
+{
+	chrome.storage.sync.get('username', function(name){
+		if(name['username'])
+		{
+			return name['username'].toString();
+		}
+  });
+}
+
 /**
  * Sets the given username for the extension..
  *
@@ -152,7 +176,7 @@ function saveUsername(name) {
 }
 
 $(document).on('submit','#target',function(){
-    var name = $("#txt").val();
+    var name = $("#txt").val().toLowerCase();
 	saveUsername(name);
 	$("#txt").val(name);
 	$("#status").html("Status: Connected as " + name);
