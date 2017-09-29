@@ -1,6 +1,6 @@
 var dict = {};
 getSavedUsername();
-
+$("#click").hide();
 document.addEventListener('DOMContentLoaded', () => {
     chrome.runtime.sendMessage({popupOpen: true}, function(response) {
 		fillDict(response);
@@ -135,6 +135,9 @@ function getSavedUsername() {
 		if(name['username'])
 		{
 			$("#txt").val(name['username'].toString())
+			$("#status").html("Status: Connected as " + name['username'].toString());
+			$("#target").hide();
+			$("#click").show();
 		}
   });
 }
@@ -149,8 +152,17 @@ function saveUsername(name) {
 }
 
 $(document).on('submit','#target',function(){
-    var name = $("#txt").val()
-	saveUsername(name)
-	$("#txt").val(name)
+    var name = $("#txt").val();
+	saveUsername(name);
+	$("#txt").val(name);
+	$("#status").html("Status: Connected as " + name);
+	$("#target").hide();
+	$("#click").show();
+	
+	return false;
+});
+
+$(document).on('click','#edit',function(){
+    $("#target").show();
 	return false;
 });
