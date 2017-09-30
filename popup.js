@@ -59,6 +59,7 @@ function getUniqueKey(instance)
 function clear(key)
 {
 	chrome.runtime.sendMessage({delete: dict[key]}, function(response) {});
+	console.log("deleting: " + key);
 	delete dict[key]; 	
 	emptyList();
  	makeList(dict);
@@ -80,8 +81,8 @@ function makeList(ourDict)
 				i.innerHTML = "<i class='material-icons clear'>clear</i>";
 				var instance = dict[key];
 				var href = instance.url;
-				p.onclick= function() { chrome.tabs.create({url: href}) };
-				i.onclick = function() { clear(key)};
+				p.onclick= (function(href) { return function () { chrome.tabs.create({url: href}) }; })(href);
+				i.onclick = (function(key) { return function () { clear(key); }; })(key);
 				p.className = "link"
 
 				var authors = getAllAuthors(instance);
@@ -96,7 +97,7 @@ function makeList(ourDict)
 					div.className = "comments"
 				}
 				else {
-					p.innerHTML = authors + " mentioned you in: " + link;
+					p.innerHTML = instance.authors + " mentioned you in: " + link;
 					div.className = "mentions"
 				}
 

@@ -4,31 +4,38 @@ var amount = 0;
 var oldChromeVersion = !chrome.runtime;
 var list = []
 
-var myAudio = new Audio("littleSound.wav");       
 
 var notificationsStored = 10;
 var votes = true;
 var comments = true;
 var mentions = true;
 var sound = true;
+var soundType = 'tick';
 
 chrome.storage.sync.get({
 	wantsVotes: true,
 	wantsComments: true,
 	wantsMentions: true,
 	notificationsStored: 10,
-	sound: true
+	sound: true,
+	soundType: 'tick'
 }, function(items) {
 	votes = items.wantsVotes;
 	comments = items.wantsComments;
 	mentions = items.wantsMentions;
 	notificationsStored = items.notificationsStored;
 	sound = items.sound;
+	soundType = items.soundType;
 });
+
+var myAudio = new Audio(soundType + ".wav");       
+
 
 var mentionChannel;
 var commentChannel;
 var UpvoteChannel;
+
+var username;
 
 onInit();
 
@@ -48,7 +55,8 @@ function onInit()
 	chrome.storage.sync.get('username', function(name){
 		if(name['username'])
 		{
-	  		createNewSubscription(name['username']);
+			username = name['username'];
+	  		createNewSubscription(username);
 		}
   });
   restoreList();
@@ -83,18 +91,18 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 	  {
 		  if(list[i].title === message.delete.title && list[i].link === message.delete.link)
 		  {
+			  console.log("deleting + " + list[i].link + " " + list[i].title)
 			  list.splice(i, 1);
-			  break;
 		  }
 	  }
   }
 });
 
-function removeOldSubscription(name)
+function removeAllOldSubscription()
 {
-	upvoteChannel.unsubscribe();
-	mentionChannel.unsubscribe();
-	commentChannel.unsubscribe();	
+	window.App.cable.subscriptions.remove(upvoteChannel);
+	window.App.cable.subscriptions.remove(mentionChannel);
+	window.App.cable.subscriptions.remove(commentChannel);	
 }
 
 function createNewSubscription(name)
@@ -117,7 +125,7 @@ function createNewSubscription(name)
 	}
 	else if(upvoteChannel)
 	{
-		upvoteChannel.unsubscribe();
+		window.App.cable.subscriptions.remove(upvoteChannel);
 	}
 
 	if(mentions)
@@ -137,7 +145,7 @@ function createNewSubscription(name)
 	}
 	else
 	{
-		mentionChannel.unsubscribe();
+		window.App.cable.subscriptions.remove(mentionChannel);
 	}
 
 	if(comments)
@@ -157,9 +165,8 @@ function createNewSubscription(name)
 	}
 	else
 	{
-		commentChannel.unsubscribe();
+		window.App.cable.subscriptions.remove(commentChannel);
 	}
-	
 }
 	
 function recieveData(data)
@@ -171,33 +178,39 @@ function recieveData(data)
 
 chrome.storage.onChanged.addListener(function(changes, namespace) {
         for (key in changes) {
-          var storageChange = changes[key];
+		  var storageChange = changes[key];
+		  removeAllOldSubscription();
           if(key === 'username')
-		  		{
-			  		createNewSubscription(storageChange.newValue);
-					removeOldSubscription(storageChange.oldValue);
-				}
-				else if(key === 'wantsComments')
-				{
-					comments = storageChange.newValue;
-				}
-				else if(key === 'wantsMentions')
-				{
-					mentions = storageChange.newValue;
-				}
-				else if(key === 'wantsVotes')
-				{
-					votes = storageChange.newValue;
-				}
-				else if(key === 'notificationsStored')
-				{
-					notificationsStored = storageChange.newValue;
-				}
-				else if(key === 'sound')
-				{
-					sound = storageChange.newValue;
-				}
+		  	{
+				username = storageChange.newValue;				
 			}
+			else if(key === 'wantsComments')
+			{
+				comments = storageChange.newValue;
+			}
+			else if(key === 'wantsMentions')
+			{
+				mentions = storageChange.newValue;
+			}
+			else if(key === 'wantsVotes')
+			{
+				votes = storageChange.newValue;
+			}
+			else if(key === 'notificationsStored')
+			{
+				notificationsStored = storageChange.newValue;
+			}
+			else if(key === 'sound')
+			{
+				sound = storageChange.newValue;
+			}
+			else if(key === 'soundType')
+			{
+				soundType = storageChange.newValue;
+				myAudio = new Audio(storageChange.newValue + ".wav");       
+			}
+			createNewSubscription(username);			
+		}
 });
 
 

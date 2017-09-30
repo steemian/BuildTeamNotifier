@@ -5,13 +5,15 @@ function save_options() {
     var wantsMentions = document.getElementById('mentions').checked;
     var notificationsStored = document.getElementById('amount').value;
     var sound = document.getElementById('mute').checked;
+    var soundType = document.getElementById('tick').checked ? document.getElementById('tick').value : document.getElementById('tock').value;
 
     chrome.storage.sync.set({
         wantsVotes: wantsVotes,
         wantsComments: wantsComments,
         wantsMentions: wantsMentions,
         notificationsStored: notificationsStored,
-        sound: sound
+        sound: sound,
+        soundType: soundType
     }, function() {
 
       // Update status to let user know options were saved.
@@ -23,6 +25,14 @@ function save_options() {
     });
   }
   
+  document.getElementById('tick').onclick = function(){
+    new Audio("tick.wav").play();
+};
+
+document.getElementById('tock').onclick = function(){
+  new Audio("tock.wav").play();
+};
+  
   // Restores Checkbox state using the preferences
   // stored in chrome.storage.
   function restore_options() {
@@ -31,14 +41,15 @@ function save_options() {
         wantsComments: true,
         wantsMentions: true,
         notificationsStored: 10,
-        sound: true
+        sound: true,
+        soundType: 'tick'
     }, function(items) {
       document.getElementById('votes').checked = items.wantsVotes;
       document.getElementById('comments').checked = items.wantsComments;
       document.getElementById('mentions').checked = items.wantsMentions;
       document.getElementById('amount').value = items.notificationsStored;
       document.getElementById('mute').checked = items.sound;
-      
+      document.getElementById(items.soundType).checked = true;
     });
   }
   document.addEventListener('DOMContentLoaded', restore_options);
