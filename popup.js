@@ -78,7 +78,7 @@ function makeList(ourDict)
 				var i = document.createElement('i');
 
 				i.className = "material-icons icons";
-				i.innerHTML = "<i class='material-icons clear'>clear</i>";
+				i.innerHTML = Sanitizer.escapeHTML`"<i class='material-icons clear'>clear</i>"`;
 				var instance = dict[key];
 				var href = instance.url;
 				p.onclick= (function(href) { return function () { chrome.tabs.create({url: href}) }; })(href);
@@ -89,15 +89,15 @@ function makeList(ourDict)
 				var link = instance.link.substr(0, 10) + "\u2026";
 
 				if(instance.title === "upvote") {
-					p.innerHTML = authors + " upvoted: " + link;
+					p.innerHTML = Sanitizer.escapeHTML`authors + " upvoted: " + link`;
 					div.className = "upvotes";
 				}
 				else if(instance.title === "comment") {
-					p.innerHTML = authors + " commented: " + link;
+					p.innerHTML = Sanitizer.escapeHTML`authors + " commented: " + link`;
 					div.className = "comments"
 				}
 				else {
-					p.innerHTML = instance.authors + " mentioned you in: " + link;
+					p.innerHTML = Sanitizer.escapeHTML`instance.authors + " mentioned you in: " + link`;
 					div.className = "mentions"
 				}
 
