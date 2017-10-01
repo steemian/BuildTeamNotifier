@@ -53,6 +53,10 @@ function getUniqueKey(instance)
 	{
 		return instance.title + instance.authors;
 	}
+	else if(instance.title === "follow")
+	{
+		return instance.title;
+	}
 	return instance.title + instance.link;
 }
 
@@ -78,7 +82,7 @@ function makeList(ourDict)
 				var i = document.createElement('i');
 
 				i.className = "material-icons icons";
-				i.innerHTML = Sanitizer.escapeHTML`"<i class='material-icons clear'>clear</i>"`;
+				i.innerHTML = Sanitizer.escapeHTML`<i class='material-icons clear'>clear</i>`;
 				var instance = dict[key];
 				var href = instance.url;
 				p.onclick= (function(href) { return function () { chrome.tabs.create({url: href}) }; })(href);
@@ -86,21 +90,34 @@ function makeList(ourDict)
 				p.className = "link"
 
 				var authors = getAllAuthors(instance);
-				var link = instance.link.substr(0, 10) + "\u2026";
+				var link = ""
+				
+				if(instance.title !== "follow") 
+				{
+					link = instance.link.substr(0, 10) + "\u2026";
+				}
 
 				if(instance.title === "upvote") {
-					p.innerHTML = Sanitizer.escapeHTML`authors + " upvoted: " + link`;
+					p.innerHTML = Sanitizer.escapeHTML`${authors} upvoted: ${link}`;
 					div.className = "upvotes";
 				}
 				else if(instance.title === "comment") {
-					p.innerHTML = Sanitizer.escapeHTML`authors + " commented: " + link`;
+					p.innerHTML = Sanitizer.escapeHTML`${authors} commented: ${link}`;
 					div.className = "comments"
 				}
+				else if(instance.title === "follow") {
+					p.innerHTML = Sanitizer.escapeHTML`${authors} now follow(s) you`;
+					div.className = "follows"
+				}
+				else if(instance.title === "resteem") {
+					p.innerHTML = Sanitizer.escapeHTML`${authors} resteemed: ${link}`;
+					div.className = "resteems"
+				}
 				else {
-					p.innerHTML = Sanitizer.escapeHTML`instance.authors + " mentioned you in: " + link`;
+					p.innerHTML = Sanitizer.escapeHTML`${instance.authors} mentioned you in: ${link}`;
 					div.className = "mentions"
 				}
-
+				
         		// Add it to the list:
 				div.appendChild(p);
 				div.appendChild(i);

@@ -9,6 +9,8 @@ var notificationsStored = 10;
 var votes = true;
 var comments = true;
 var mentions = true;
+var follows = true;
+var resteems = true;
 var sound = true;
 var soundType = 'tick';
 
@@ -16,6 +18,8 @@ chrome.storage.sync.get({
 	wantsVotes: true,
 	wantsComments: true,
 	wantsMentions: true,
+	wantsFollows: true,
+	wantsResteems: true,
 	notificationsStored: 10,
 	sound: true,
 	soundType: 'tick'
@@ -23,6 +27,8 @@ chrome.storage.sync.get({
 	votes = items.wantsVotes;
 	comments = items.wantsComments;
 	mentions = items.wantsMentions;
+	follows = items.wantsFollows;
+	resteems = items.wantsResteems;	
 	notificationsStored = items.notificationsStored;
 	sound = items.sound;
 	soundType = items.soundType;
@@ -33,7 +39,10 @@ var myAudio = new Audio(soundType + ".wav");
 
 var mentionChannel;
 var commentChannel;
-var UpvoteChannel;
+var upvoteChannel;
+var followChannel;
+var resteemChannel;
+
 
 var username;
 
@@ -102,7 +111,9 @@ function removeAllOldSubscription()
 {
 	window.App.cable.subscriptions.remove(upvoteChannel);
 	window.App.cable.subscriptions.remove(mentionChannel);
-	window.App.cable.subscriptions.remove(commentChannel);	
+	window.App.cable.subscriptions.remove(commentChannel);
+	window.App.cable.subscriptions.remove(followChannel);	
+	window.App.cable.subscriptions.remove(resteemChannel);		
 }
 
 function createNewSubscription(name)
@@ -167,6 +178,46 @@ function createNewSubscription(name)
 	{
 		window.App.cable.subscriptions.remove(commentChannel);
 	}
+
+	if(follows)
+	{
+		followChannel = window.App.cable.subscriptions.create ({channel:"FollowChannel", name: name}, {received: function(data)
+			{
+				addToList(data, "follow");
+				amount++;
+				chrome.browserAction.setBadgeText({text: amount + ""});
+				chrome.runtime.sendMessage({msg: "add", data: 0});
+				if(sound)
+				{
+					myAudio.play();
+				}
+			}
+		});
+	}
+	else
+	{
+		window.App.cable.subscriptions.remove(followChannel);
+	}
+
+	if(resteems)
+	{
+		resteemChannel = window.App.cable.subscriptions.create ({channel:"ResteemChannel", name: name}, {received: function(data)
+			{
+				addToList(data, "resteem");
+				amount++;
+				chrome.browserAction.setBadgeText({text: amount + ""});
+				chrome.runtime.sendMessage({msg: "add", data: 0});
+				if(sound)
+				{
+					myAudio.play();
+				}
+			}
+		});
+	}
+	else
+	{
+		window.App.cable.subscriptions.remove(resteemChannel);
+	}
 }
 	
 function recieveData(data)
@@ -195,6 +246,14 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 			else if(key === 'wantsVotes')
 			{
 				votes = storageChange.newValue;
+			}
+			else if(key === 'wantsFollows')
+			{
+				follows = storageChange.newValue;
+			}
+			else if(key === 'wantsResteems')
+			{
+				resteems = storageChange.newValue;
 			}
 			else if(key === 'notificationsStored')
 			{

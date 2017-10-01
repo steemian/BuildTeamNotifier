@@ -38,6 +38,9 @@ hr{
     box-sizing: border-box;
     background-color: #4c1699;
 }
+
+.follows,
+.resteems,
 .upvotes,
 .comments,
 .mentions {
@@ -66,6 +69,12 @@ hr{
 }
 .mentions {
     background-color: #2196f3;
+}
+.follows {
+    background-color: #EC21F3;
+}
+.resteems {
+    background-color: #14E1F0;
 }
 .primary-icons {
     margin-right: calc(-100% + 3em);

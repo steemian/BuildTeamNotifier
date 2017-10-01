@@ -3,6 +3,8 @@ function save_options() {
     var wantsVotes = document.getElementById('votes').checked;
     var wantsComments = document.getElementById('comments').checked;
     var wantsMentions = document.getElementById('mentions').checked;
+    var wantsFollows = document.getElementById('followers').checked;
+    var wantsResteems = document.getElementById('resteems').checked;    
     var notificationsStored = document.getElementById('amount').value;
     var sound = document.getElementById('mute').checked;
     var soundType = document.getElementById('tick').checked ? document.getElementById('tick').value : document.getElementById('tock').value;
@@ -11,6 +13,8 @@ function save_options() {
         wantsVotes: wantsVotes,
         wantsComments: wantsComments,
         wantsMentions: wantsMentions,
+        wantsFollows: wantsFollows,
+        wantsResteems: wantsResteems,
         notificationsStored: notificationsStored,
         sound: sound,
         soundType: soundType
@@ -40,6 +44,8 @@ document.getElementById('tock').onclick = function(){
         wantsVotes: true,
         wantsComments: true,
         wantsMentions: true,
+        wantsFollows: true,
+        wantsResteems: true,
         notificationsStored: 10,
         sound: true,
         soundType: 'tick'
@@ -47,6 +53,8 @@ document.getElementById('tock').onclick = function(){
       document.getElementById('votes').checked = items.wantsVotes;
       document.getElementById('comments').checked = items.wantsComments;
       document.getElementById('mentions').checked = items.wantsMentions;
+      document.getElementById('followers').checked = items.wantsFollows;
+      document.getElementById('resteems').checked = items.wantsResteems;
       document.getElementById('amount').value = items.notificationsStored;
       document.getElementById('mute').checked = items.sound;
       document.getElementById(items.soundType).checked = true;
