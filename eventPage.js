@@ -5,7 +5,7 @@ var oldChromeVersion = !chrome.runtime;
 var list = []
 
 
-var notificationsStored = 10;
+var notificationsStored = 100;
 var votes = true;
 var comments = true;
 var mentions = true;
@@ -20,7 +20,7 @@ chrome.storage.sync.get({
 	wantsMentions: true,
 	wantsFollows: true,
 	wantsResteems: true,
-	notificationsStored: 10,
+	notificationsStored: 100,
 	sound: true,
 	soundType: 'tick'
 }, function(items) {
@@ -109,11 +109,21 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 function removeAllOldSubscription()
 {
-	window.App.cable.subscriptions.remove(upvoteChannel);
-	window.App.cable.subscriptions.remove(mentionChannel);
-	window.App.cable.subscriptions.remove(commentChannel);
-	window.App.cable.subscriptions.remove(followChannel);	
-	window.App.cable.subscriptions.remove(resteemChannel);		
+	if (upvoteChannel) {
+		window.App.cable.subscriptions.remove(upvoteChannel);
+	}
+	if (mentionChannel) {
+		window.App.cable.subscriptions.remove(mentionChannel);
+	}
+	if (commentChannel) {
+		window.App.cable.subscriptions.remove(commentChannel);
+	}
+	if (followChannel) {
+		window.App.cable.subscriptions.remove(followChannel);
+	}
+	if (resteemChannel) {
+		window.App.cable.subscriptions.remove(resteemChannel);	
+	}	
 }
 
 function createNewSubscription(name)

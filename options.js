@@ -46,7 +46,7 @@ document.getElementById('tock').onclick = function(){
         wantsMentions: true,
         wantsFollows: true,
         wantsResteems: true,
-        notificationsStored: 10,
+        notificationsStored: 100,
         sound: true,
         soundType: 'tick'
     }, function(items) {

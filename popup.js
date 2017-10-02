@@ -25,7 +25,7 @@ function fillDict(array)
 					
 					if(dict[key].title === "mention")
 					{
-						dict[key].url = "https://www.minnowbooster.net/users/" + retrieveUsername() + "/mentions";
+						dict[key].url = "https://www.minnowbooster.net/users/" + $("#txt").val() + "/mentions";
 						dict[key].link = (dict[key].numOfAuthors + 1) + " locations"
 					}
 					dict[key].numOfAuthors++;
