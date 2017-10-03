@@ -98,9 +98,24 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   {
 	  for(i = 0; i < list.length; i++)
 	  {
-		  if(list[i].title === message.delete.title && list[i].link === message.delete.link)
+		  var messageTitle = message.delete.title;
+		  var instanceTitle = list[i].title;
+
+		  if(messageTitle === "mention" && instanceTitle === "mention")
 		  {
-			  console.log("deleting + " + list[i].link + " " + list[i].title)
+			  console.log("deleting + " + list[i].link + " " + instanceTitle);
+			  list.splice(i, 1);
+		  }
+
+		  if(messageTitle === "follow" && instanceTitle === "follow")
+		  {
+			  console.log("deleting + " + list[i].link + " " + instanceTitle);
+			  list.splice(i, 1);
+		  }
+
+		  if(instanceTitle === messageTitle && list[i].link === message.delete.link)
+		  {
+			  console.log("deleting + " + list[i].link + " " + instanceTitle)
 			  list.splice(i, 1);
 		  }
 	  }
