@@ -1,4 +1,5 @@
 var dict = {};
+var globalName = "";
 getSavedUsername();
 $("#click").hide();
 document.addEventListener('DOMContentLoaded', () => {
@@ -25,7 +26,7 @@ function fillDict(array)
 					
 					if(dict[key].title === "mention")
 					{
-						dict[key].url = "https://www.minnowbooster.net/users/" + $("#txt").val() + "/mentions";
+						dict[key].url = "https://www.minnowbooster.net/users/" + globalName + "/mentions";
 						dict[key].link = (dict[key].numOfAuthors + 1) + " locations"
 					}
 					dict[key].numOfAuthors++;
@@ -166,8 +167,10 @@ function getSavedUsername() {
   chrome.storage.sync.get('username', function(name){
 		if(name['username'])
 		{
-			$("#txt").val(name['username'].toString())
-			$("#status").html("Status: Connected as " + name['username'].toString());
+			var result = name['username'].toString();
+			globalName = result;
+			$("#txt").val(result)
+			$("#status").html("Status: Connected as " + result);
 			$("#target").hide();
 			$("#click").show();
 		}
@@ -194,7 +197,8 @@ function saveUsername(name) {
 }
 
 $(document).on('submit','#target',function(){
-    var name = $("#txt").val().toLowerCase();
+	var name = $("#txt").val().toLowerCase();
+	globalName = name;
 	saveUsername(name);
 	$("#txt").val(name);
 	$("#status").html("Status: Connected as " + name);
