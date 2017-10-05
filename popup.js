@@ -143,6 +143,7 @@ chrome.runtime.onMessage.addListener(
         if (request.msg === "add") {
 			$("#list").append(chrome.runtime.getBackgroundPage(function(backgroundPage) {
 				emptyList();
+				dict = {};
 				fillDict(backgroundPage.list);
 				backgroundPage.reset();
 				makeList(dict);
