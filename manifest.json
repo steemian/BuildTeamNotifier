@@ -1,6 +1,8 @@
 {
   "manifest_version": 2,
 
+
+
   "name": "BuildTeam - Notifier",
   "description": "This extension allows the user to be notified about certain Steemit events.",
   "version": "1.9.4",
@@ -27,6 +29,14 @@
     "storage",
     "tabs",
     "http://www,minnowbooster.net/"
-  ]
+  ],
+
+  
+  "applications": {
+  "gecko": {
+    "id": "addon@example.comF54D7EA301",
+    "strict_min_version": "42.0"
+  }
+}
 	
 }
