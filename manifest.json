@@ -23,10 +23,22 @@
     "chrome_style": true
   },
   "permissions": [
-    "activeTab",
     "storage",
+<<<<<<< Updated upstream
     "tabs",
     "http://www,minnowbooster.net/"
   ]
+=======
+    "http://www.minnowbooster.net/"
+  ],
+
+  
+  "applications": {
+  "gecko": {
+    "id": "addon@example.comF54D7EA301",
+    "strict_min_version": "42.0"
+  }
+}
+>>>>>>> Stashed changes
 	
 }
